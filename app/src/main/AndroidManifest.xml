@@ -3,12 +3,18 @@
           package="com.hoowe.locationprovider">
 
     <application
+        android:name=".LocationApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="OnWeRq8Fp3AfBVWoD0lO535kHctU1vBz"/>  <!--http://lbsyun.baidu.com/apiconsole/key-->
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

@@ -10,7 +10,7 @@ import com.baidu.location.LocationClientOption.LocationMode;
 /**
  * @author baidu
  */
-public class LocationService {
+public class LocationManager {
     private LocationClient client = null;
     private LocationClientOption mOption, DIYoption;
     private Object objLock = new Object();
@@ -19,7 +19,7 @@ public class LocationService {
      *
      * @param locationContext
      */
-    public LocationService(Context locationContext) {
+    public LocationManager(Context locationContext) {
         synchronized (objLock) {
             if (client == null) {
                 client = new LocationClient(locationContext);
@@ -33,7 +33,6 @@ public class LocationService {
      * @param listener
      * @return
      */
-
     public boolean registerListener(BDAbstractLocationListener listener) {
         boolean isSuccess = false;
         if (listener != null) {
@@ -110,10 +109,5 @@ public class LocationService {
         }
     }
 
-    public boolean requestHotSpotState() {
-
-        return client.requestHotSpotState();
-
-    }
 
 }

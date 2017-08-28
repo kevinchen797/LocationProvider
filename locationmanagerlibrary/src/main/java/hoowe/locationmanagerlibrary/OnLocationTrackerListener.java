@@ -9,4 +9,7 @@ import com.baidu.location.BDLocation;
 public interface OnLocationTrackerListener {
 
     void onReceiveLocation(BDLocation bdLocation);
+
+    void onLocationTrackerExist();
+
 }

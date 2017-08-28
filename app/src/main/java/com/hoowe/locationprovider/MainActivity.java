@@ -8,13 +8,13 @@ import android.widget.TextView;
 import com.baidu.location.BDLocation;
 
 import hoowe.locationmanagerlibrary.HooweLocationProvider;
-import hoowe.locationmanagerlibrary.LocationManager;
+import hoowe.locationmanagerlibrary.LocationTracker;
 import hoowe.locationmanagerlibrary.OnLocationTrackerListener;
 
 public class MainActivity extends AppCompatActivity {
 
     private TextView tvContent;
-    LocationManager mManager;
+    LocationTracker mManager;
     private static final String TAG = "MainActivity";
 
     @Override
@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         tvContent = (TextView) findViewById(R.id.tv_content);
-//        mManager = new LocationManager(this);
+//        mManager = new LocationTracker(this);
 //        mManager.registerListener(new BDAbstractLocationListener() {
 //            @Override
 //            public void onReceiveLocation(BDLocation bdLocation) {
@@ -36,17 +36,41 @@ public class MainActivity extends AppCompatActivity {
 //
 //        mManager.start();
 
-        HooweLocationProvider.getInstance().getCurrentLocation(HooweLocationProvider.getInstance().getDefaultLocationClientOption(), new OnLocationTrackerListener() {
+//        HooweLocationProvider.getInstance().getCurrentLocation(HooweLocationProvider.getInstance().getDefaultLocationClientOption(), new OnLocationTrackerListener() {
+//            @Override
+//            public void onReceiveLocation(BDLocation bdLocation) {
+//                Log.d(TAG, "onReceiveLocation 1 Latitude = " + bdLocation.getLatitude());
+//            }
+//        });
+//
+//        HooweLocationProvider.getInstance().getCurrentLocation(HooweLocationProvider.getInstance().getDefaultLocationClientOption(), new OnLocationTrackerListener() {
+//            @Override
+//            public void onReceiveLocation(BDLocation bdLocation) {
+//                Log.d(TAG, "onReceiveLocation 2 Latitude = " + bdLocation.getLatitude());
+//            }
+//        });
+
+        HooweLocationProvider.getInstance().startTracker(3, new OnLocationTrackerListener() {
             @Override
             public void onReceiveLocation(BDLocation bdLocation) {
-                Log.d(TAG, "onReceiveLocation 1 Latitude = " + bdLocation.getLatitude());
+                Log.d(TAG, "onReceiveLocation 3 Latitude = " + bdLocation.getLatitude());
+            }
+
+            @Override
+            public void onLocationTrackerExist() {
+                Log.d(TAG, "onLocationTrackerExist 1");
             }
         });
 
-        HooweLocationProvider.getInstance().getCurrentLocation(HooweLocationProvider.getInstance().getDefaultLocationClientOption(), new OnLocationTrackerListener() {
+        HooweLocationProvider.getInstance().startTracker(3, new OnLocationTrackerListener() {
             @Override
             public void onReceiveLocation(BDLocation bdLocation) {
-                Log.d(TAG, "onReceiveLocation 2 Latitude = " + bdLocation.getLatitude());
+                Log.d(TAG, "onReceiveLocation 4 Latitude = " + bdLocation.getLatitude());
+            }
+
+            @Override
+            public void onLocationTrackerExist() {
+                Log.d(TAG, "onLocationTrackerExist 2");
             }
         });
 
@@ -55,8 +79,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mManager != null) {
-            mManager.stop();
-        }
+        HooweLocationProvider.getInstance().endTracker();
     }
 }

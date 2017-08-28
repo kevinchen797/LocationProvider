@@ -1,9 +1,6 @@
 package hoowe.locationmanagerlibrary;
 
 import android.content.Context;
-
-import com.baidu.location.BDAbstractLocationListener;
-import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.SDKInitializer;
 
@@ -18,17 +15,21 @@ public class HooweLocationProvider {
 
     private Context mContext;
 
-    private OnLocationTrackerListener mListener;
+//    private OnLocationTrackerListener mListener;
 
     private LocationClientOption mOption;
+
+    private LocationTracker mTracker;
+
+    private boolean hasTracker = false;
 
     /**
      * 类级的内部类，也就是静态类的成员式内部类，该内部类的实例与外部类的实例
      * 没有绑定关系，而且只有被调用时才会装载，从而实现了延迟加载
-     * @author dream
      *
+     * @author dream
      */
-    private static class LocationProviderHolder{
+    private static class LocationProviderHolder {
         /**
          * 静态初始化器，由JVM来保证线程安全
          */
@@ -38,21 +39,31 @@ public class HooweLocationProvider {
     /**
      * 私有化构造方法
      */
-    private HooweLocationProvider(){
+    private HooweLocationProvider() {
 
     }
 
-    public static HooweLocationProvider getInstance(){
+    public static HooweLocationProvider getInstance() {
         return LocationProviderHolder.instance;
     }
 
     /**
      * initialize Map SDK
+     *
      * @param context
      */
     public void initialize(Context context) {
         this.mContext = context;
         SDKInitializer.initialize(context);
+    }
+
+    /**
+     * 是否存在追踪任务
+     *
+     * @return
+     */
+    public boolean isHasTracker() {
+        return hasTracker;
     }
 
     /***
@@ -73,39 +84,42 @@ public class HooweLocationProvider {
             mOption.setIsNeedLocationDescribe(true);//可选，默认false，设置是否需要位置语义化结果，可以在BDLocation.getLocationDescribe里得到，结果类似于“在北京天安门附近”
             mOption.setIsNeedLocationPoiList(true);//可选，默认false，设置是否需要POI结果，可以在BDLocation.getPoiList里得到
             mOption.SetIgnoreCacheException(false);//可选，默认false，设置是否收集CRASH信息，默认收集
-
             mOption.setIsNeedAltitude(false);//可选，默认false，设置定位时是否需要海拔信息，默认不需要，除基础定位版本都可用
-
         }
         return mOption;
     }
 
     /**
      * 获取当前位置（实时定位）
+     *
+     * @param listener
+     */
+    public void getCurrentLocation(OnLocationTrackerListener listener) {
+        this.getCurrentLocation(null, listener);
+    }
+
+    /**
+     * 获取当前位置（实时定位）
+     *
      * @param mOption
      * @param listener
      */
-    public void getCurrentLocation(LocationClientOption mOption, final OnLocationTrackerListener listener) {
-        this.mListener = listener;
-        final LocationManager locationManager = new LocationManager(mContext);
-        locationManager.setLocationOption(mOption);
-        locationManager.registerListener(new BDAbstractLocationListener() {
-            @Override
-            public void onReceiveLocation(BDLocation bdLocation) {
-                if (listener != null) {
-                    listener.onReceiveLocation(bdLocation);
-                    locationManager.unregisterListener(this);
+    public void getCurrentLocation(LocationClientOption mOption, OnLocationTrackerListener listener) {
+        if (hasTracker) { // 有追踪任务在运行
+            // TODO: 2017/8/28 获取最新位置返回
+        } else {
+            final LocationTracker locationTracker = new LocationTracker(mContext);
+            if (mOption != null)
+                locationTracker.setLocationOption(mOption);
 
-                    // TODO: 2017/8/28 将位置信息插入数据库
-
-                }
-            }
-        });
-        locationManager.start();
+            locationTracker.registerListener(listener);
+            locationTracker.start();
+        }
     }
 
     /**
      * 获取特定时间该设备的位置（前提是指定时间开启过位置追踪）
+     *
      * @param time
      */
     public void getLocationByTime(long time) {
@@ -113,6 +127,7 @@ public class HooweLocationProvider {
 
     /**
      * 获取特定时间断该设备的位置（前提是指定时间断开启过位置追踪）
+     *
      * @param startTime
      * @param endTime
      */
@@ -120,18 +135,53 @@ public class HooweLocationProvider {
     }
 
     /**
-     *  开始位置追踪
-     * @param mOption
+     * 开始位置追踪
+     *
+     * @param frequency 定位频率
+     * @param listener
      */
-    public void startTracker(LocationClientOption mOption) {
-
+    public void startTracker(int frequency, OnLocationTrackerListener listener) {
+        this.startTracker(null, frequency, listener);
     }
 
     /**
-     *  结束位置追踪
-     * @param mOption
+     * 开始位置追踪
+     *
+     * @param mOption   定位配置
+     * @param frequency 定位频率
+     * @param listener
      */
-    public void endTracker(LocationClientOption mOption) {
+    public void startTracker(LocationClientOption mOption, int frequency, OnLocationTrackerListener listener) {
+        if (!hasTracker) {
+            mTracker = new LocationTracker(mContext);
+            if (mOption != null) {
+                if (frequency >= 1) {
+                    mOption.setScanSpan(frequency * 1000);
+                }
+                mTracker.setLocationOption(mOption);
+            }
+
+            mTracker.registerListener(listener);
+            mTracker.start();
+            hasTracker = true;
+        } else { // 已经存在追踪任务
+
+            // TODO: 2017/8/28 回调通知调用者
+            if (listener != null) {
+                listener.onLocationTrackerExist();
+            }
+        }
+    }
+
+    /**
+     * 结束位置追踪
+     */
+    public void endTracker() {
+        if (mTracker != null) {
+            mTracker.unregisterListener();
+            mTracker.stop();
+        }
+        hasTracker = false;
 
     }
 

@@ -63,6 +63,7 @@ public class HooweLocationProvider {
     public void initialize(Context context) {
         this.mContext = context;
         SDKInitializer.initialize(context);
+        LocationDBHelper.getHelper(context).DbActionRun();
     }
 
     /**
@@ -164,7 +165,7 @@ public class HooweLocationProvider {
     /**
      * 开始位置追踪
      *
-     * @param frequency 定位频率
+     * @param frequency 定位频率 单位：毫秒
      * @param listener
      */
     public void startTracker(int frequency, OnLocationTrackerListener listener) {
@@ -182,7 +183,7 @@ public class HooweLocationProvider {
         if (!hasTracker) {
             mTracker = new HooweLocationTracker(mContext);
             if (mOption != null) {
-                if (frequency >= 1) {
+                if (frequency > 1000) {
                     mOption.setScanSpan(frequency);
                     mFrequency = frequency;
                 } else {

@@ -168,6 +168,13 @@ public class LocationDBHelper extends SQLiteOpenHelper {
         return null;
     }
 
+    /**
+     * ************************** DBProxy 方法*************************
+     */
+
+    public void DbActionRun() {
+        dbActionRun();
+    }
 
     /**
      * ********************发送DB写操作 Action************************

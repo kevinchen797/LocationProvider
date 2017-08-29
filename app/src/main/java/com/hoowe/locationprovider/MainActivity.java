@@ -12,6 +12,8 @@ import java.util.Random;
 import hoowe.locationmanagerlibrary.hoowe.HooweLocation;
 import hoowe.locationmanagerlibrary.hoowe.HooweLocationProvider;
 import hoowe.locationmanagerlibrary.hoowe.HooweLocationTracker;
+import hoowe.locationmanagerlibrary.hoowe.OnLocationTrackerListener;
+import hoowe.locationmanagerlibrary.utils.TimeUtils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -52,46 +54,54 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 
-//        HooweLocationProvider.getInstance().startTracker(3, new OnLocationTrackerListener() {
-//            @Override
-//            public void onReceiveLocation(BDLocation bdLocation) {
-//                Log.d(TAG, "onReceiveLocation 3 time = " + TimeUtils.string2Millis(bdLocation.getTime()));
-//                Log.d(TAG, "currentTime = " + System.currentTimeMillis());
-//            }
-//
-//            @Override
-//            public void onLocationTrackerExist() {
-//                Log.d(TAG, "onLocationTrackerExist 1");
-//            }
-//        });
-//
-//        HooweLocationProvider.getInstance().startTracker(3, new OnLocationTrackerListener() {
-//            @Override
-//            public void onReceiveLocation(BDLocation bdLocation) {
-//                Log.d(TAG, "onReceiveLocation 4 Latitude = " + TimeUtils.string2Millis(bdLocation.getTime()));
-//            }
-//
-//            @Override
-//            public void onLocationTrackerExist() {
-//                Log.d(TAG, "onLocationTrackerExist 2");
-//            }
-//        });
+        HooweLocationProvider.getInstance().startTracker(3000, new OnLocationTrackerListener() {
 
+            @Override
+            public void onReceiveLocation(HooweLocation hooweLocation) {
+                Log.d(TAG, "onReceiveLocation 3");
+                Log.d(TAG, "onReceiveLocation 3 time = " + hooweLocation.getLocTimeText());
+                Log.d(TAG, "currentTime = " + System.currentTimeMillis());
+            }
 
-    }
+            @Override
+            public void onReceiveLocation(List<HooweLocation> list) {
 
-    private void test() {
-        long time = System.currentTimeMillis();
-        Log.i(TAG, "currentTimeMillis = " + time);
-        List<HooweLocation> list = new ArrayList<>();
-        for (int i = 0; i < 40; i++) {
-            HooweLocation location = new HooweLocation();
-            location.setLocTime(time + new Random().nextInt(10000));
-            list.add(location);
-        }
-        for (HooweLocation loc : list) {
-            Log.i(TAG, "locTime = " + loc.getLocTime());
-        }
+            }
+
+            @Override
+            public void onLocationTrackerExist() {
+                Log.d(TAG, "onLocationTrackerExist 1");
+            }
+
+            @Override
+            public void onLocationTrackerNotRun() {
+
+            }
+        });
+
+        HooweLocationProvider.getInstance().startTracker(3000, new OnLocationTrackerListener() {
+            @Override
+            public void onReceiveLocation(HooweLocation bdLocation) {
+                Log.d(TAG, "onReceiveLocation 3");
+                Log.d(TAG, "onReceiveLocation 4 Latitude = " + TimeUtils.string2Millis(bdLocation.getLocTimeText()));
+            }
+
+            @Override
+            public void onReceiveLocation(List<HooweLocation> list) {
+
+            }
+
+            @Override
+            public void onLocationTrackerExist() {
+                Log.d(TAG, "onLocationTrackerExist 2");
+            }
+
+            @Override
+            public void onLocationTrackerNotRun() {
+
+            }
+        });
+
 
     }
 

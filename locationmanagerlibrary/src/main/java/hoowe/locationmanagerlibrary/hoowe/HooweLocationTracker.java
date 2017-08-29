@@ -10,6 +10,7 @@ import com.baidu.location.LocationClientOption;
 import com.baidu.location.LocationClientOption.LocationMode;
 
 import hoowe.locationmanagerlibrary.db.LocationDBHelper;
+import hoowe.locationmanagerlibrary.utils.TimeUtils;
 
 /**
  * @author DreamFish
@@ -139,6 +140,8 @@ public class HooweLocationTracker extends BDAbstractLocationListener {
         HooweLocation location = new HooweLocation();
         location.setLocationID(bdLocation.getLocationID());
         location.setLocType(bdLocation.getLocType());
+        location.setLocTime(TimeUtils.string2Millis(bdLocation.getTime()));
+        location.setLocTimeText(bdLocation.getTime());
         location.setLatitude(bdLocation.getLatitude());
         location.setLongitude(bdLocation.getLongitude());
         location.setRadius(bdLocation.getRadius());

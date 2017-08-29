@@ -36,7 +36,7 @@ public class HooweLocation {
     /**
      *  地址信息
      */
-    private float addrStr;
+    private String addrStr;
     /**
      *  国家信息
      */
@@ -162,11 +162,11 @@ public class HooweLocation {
         this.radius = radius;
     }
 
-    public float getAddrStr() {
+    public String getAddrStr() {
         return addrStr;
     }
 
-    public void setAddrStr(float addrStr) {
+    public void setAddrStr(String addrStr) {
         this.addrStr = addrStr;
     }
 

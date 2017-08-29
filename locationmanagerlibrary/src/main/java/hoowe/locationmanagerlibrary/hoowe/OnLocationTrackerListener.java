@@ -1,6 +1,7 @@
 package hoowe.locationmanagerlibrary.hoowe;
 
-import com.baidu.location.BDLocation;
+
+import java.util.List;
 
 /**
  * Created by chen.mingyao on 2017/8/28.
@@ -8,8 +9,12 @@ import com.baidu.location.BDLocation;
 
 public interface OnLocationTrackerListener {
 
-    void onReceiveLocation(BDLocation bdLocation);
+    void onReceiveLocation(HooweLocation location);
+
+    void onReceiveLocation(List<HooweLocation> LocationList);
 
     void onLocationTrackerExist();
+
+    void onLocationTrackerNotRun();
 
 }

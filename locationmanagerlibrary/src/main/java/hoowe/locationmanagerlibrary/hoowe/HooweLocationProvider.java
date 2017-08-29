@@ -5,6 +5,11 @@ import android.content.Context;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.SDKInitializer;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import hoowe.locationmanagerlibrary.db.LocationDBHelper;
+
 
 /**
  * Created by DreamFisn on 2017/8/26.
@@ -24,7 +29,7 @@ public class HooweLocationProvider {
 
     private static int LOCATION_FREQUENCY = 1000; // 默认定位频度 1 秒/次 (必须 >= 1 秒)
 
-    private int mFrequency = 1; // 定位频度
+    private int mFrequency = LOCATION_FREQUENCY; // 定位频度
 
     /**
      * 类级的内部类，也就是静态类的成员式内部类，该内部类的实例与外部类的实例
@@ -113,7 +118,9 @@ public class HooweLocationProvider {
      */
     public void getCurrentLocation(LocationClientOption mOption, OnLocationTrackerListener listener) {
         if (hasTracker) { // 有追踪任务在运行
-            // TODO: 2017/8/28 获取最新位置返回
+            // 获取最新位置返回
+            HooweLocation location = LocationDBHelper.getHelper(mContext).getLatestLocation();
+            listener.onReceiveLocation(location);
         } else {
             final HooweLocationTracker locationTracker = new HooweLocationTracker(mContext);
             if (mOption != null)
@@ -129,7 +136,13 @@ public class HooweLocationProvider {
      *
      * @param time
      */
-    public void getLocationByTime(long time) {
+    public void getLocationByTime(long time, OnLocationTrackerListener listener) {
+        HooweLocation location = LocationDBHelper.getHelper(mContext).locDBLoadByTime(time);
+        if (location != null) {
+            listener.onReceiveLocation(location);
+        } else {
+            listener.onLocationTrackerNotRun();
+        }
     }
 
     /**
@@ -138,7 +151,14 @@ public class HooweLocationProvider {
      * @param startTime
      * @param endTime
      */
-    public void getLocationByPeriod(Long startTime, long endTime) {
+    public void getLocationByPeriod(Long startTime, long endTime, OnLocationTrackerListener listener) {
+        List<HooweLocation> locationList = new ArrayList<>();
+        locationList.addAll(LocationDBHelper.getHelper(mContext).locDBLoadByPeriod(startTime, endTime));
+        if (locationList.size() > 0) {
+            listener.onReceiveLocation(locationList);
+        } else {
+            listener.onLocationTrackerNotRun();
+        }
     }
 
     /**
@@ -155,7 +175,7 @@ public class HooweLocationProvider {
      * 开始位置追踪
      *
      * @param mOption   定位配置
-     * @param frequency 定位频率
+     * @param frequency 定位频率 单位：毫秒
      * @param listener
      */
     public void startTracker(LocationClientOption mOption, int frequency, OnLocationTrackerListener listener) {
@@ -163,7 +183,7 @@ public class HooweLocationProvider {
             mTracker = new HooweLocationTracker(mContext);
             if (mOption != null) {
                 if (frequency >= 1) {
-                    mOption.setScanSpan(frequency * 1000);
+                    mOption.setScanSpan(frequency);
                     mFrequency = frequency;
                 } else {
                     mOption.setScanSpan(LOCATION_FREQUENCY);

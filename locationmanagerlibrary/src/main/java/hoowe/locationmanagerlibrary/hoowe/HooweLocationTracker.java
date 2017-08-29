@@ -9,11 +9,15 @@ import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.location.LocationClientOption.LocationMode;
 
+import hoowe.locationmanagerlibrary.db.LocationDBHelper;
+
 /**
  * @author DreamFish
  */
 public class HooweLocationTracker extends BDAbstractLocationListener {
     public static final String TAG = "HooweLocationTracker";
+
+    private Context mContext;
 
     private LocationClient client = null;
 
@@ -29,6 +33,7 @@ public class HooweLocationTracker extends BDAbstractLocationListener {
      */
     public HooweLocationTracker(Context locationContext) {
         synchronized (objLock) {
+            mContext = locationContext;
             if (client == null) {
                 client = new LocationClient(locationContext);
                 client.setLocOption(getDefaultLocationClientOption());
@@ -107,6 +112,14 @@ public class HooweLocationTracker extends BDAbstractLocationListener {
         }
     }
 
+    public void reStart() {
+        synchronized (objLock) {
+            if (client != null) {
+                client.restart();
+            }
+        }
+    }
+
     public void stop() {
         synchronized (objLock) {
             if (client != null && client.isStarted()) {
@@ -123,9 +136,33 @@ public class HooweLocationTracker extends BDAbstractLocationListener {
     @Override
     public void onReceiveLocation(BDLocation bdLocation) {
         Log.d(TAG, "tracker onReceiveLocation");
-        // TODO: 2017/8/28 将数据插入数据库
+        HooweLocation location = new HooweLocation();
+        location.setLocationID(bdLocation.getLocationID());
+        location.setLocType(bdLocation.getLocType());
+        location.setLatitude(bdLocation.getLatitude());
+        location.setLongitude(bdLocation.getLongitude());
+        location.setRadius(bdLocation.getRadius());
+        location.setAddrStr(bdLocation.getAddrStr());
+        location.setCountry(bdLocation.getCountry());
+        location.setCountryCode(bdLocation.getCountryCode());
+        location.setCity(bdLocation.getCity());
+        location.setCityCode(bdLocation.getCityCode());
+        location.setDistrict(bdLocation.getDistrict());
+        location.setStreet(bdLocation.getStreet());
+        location.setStreetNumber(bdLocation.getStreetNumber());
+        location.setLocationDescribe(bdLocation.getLocationDescribe());
+        location.setBuildingID(bdLocation.getBuildingID());
+        location.setBuildingName(bdLocation.getBuildingName());
+        location.setFloor(bdLocation.getFloor());
+        location.setSpeed(bdLocation.getSpeed());
+        location.setSatelliteNumber(bdLocation.getSatelliteNumber());
+        location.setAltitude(bdLocation.getAltitude());
+        location.setDirection(bdLocation.getDirection());
+        location.setOperators(bdLocation.getOperators());
 
-        // TODO: 2017/8/28 每次位置更新回调通知界面
-        mListener.onReceiveLocation(bdLocation);
+        // 将数据插入数据库
+        LocationDBHelper.getHelper(mContext).locationInsert(location);
+        // 每次位置更新回调通知界面
+        mListener.onReceiveLocation(location);
     }
 }

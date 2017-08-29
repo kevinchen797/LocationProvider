@@ -54,7 +54,7 @@ public class TableLocation {
         hooweLocation.setLatitude(cursor.getDouble(cursor.getColumnIndex(DBDefine.t_location.locLatitude)));
         hooweLocation.setLongitude(cursor.getDouble(cursor.getColumnIndex(DBDefine.t_location.locLongitude)));
         hooweLocation.setRadius(cursor.getFloat(cursor.getColumnIndex(DBDefine.t_location.radius)));
-        hooweLocation.setAddrStr(cursor.getFloat(cursor.getColumnIndex(DBDefine.t_location.addrStr)));
+        hooweLocation.setAddrStr(cursor.getString(cursor.getColumnIndex(DBDefine.t_location.addrStr)));
         hooweLocation.setCountry(cursor.getString(cursor.getColumnIndex(DBDefine.t_location.country)));
         hooweLocation.setCountryCode(cursor.getString(cursor.getColumnIndex(DBDefine.t_location.countryCode)));
         hooweLocation.setCity(cursor.getString(cursor.getColumnIndex(DBDefine.t_location.city)));
@@ -143,7 +143,7 @@ public class TableLocation {
                         DBDefine.t_location.locLatitude + " = '%f', " +
                         DBDefine.t_location.locLongitude + " = '%f'," +
                         DBDefine.t_location.radius + " = '%f'," +
-                        DBDefine.t_location.addrStr + " = '%f'," +
+                        DBDefine.t_location.addrStr + " = '%s'," +
                         DBDefine.t_location.country + " = '%s'," +
                         DBDefine.t_location.countryCode + " = '%s'," +
                         DBDefine.t_location.city + " = '%s'," +
@@ -191,6 +191,40 @@ public class TableLocation {
     }
 
     /**
+     * 获取最新的位置信息
+     * @return
+     */
+    protected HooweLocation getLatestLocation() {
+        Log.i(TAG, "[DB] load latest location");
+
+        HooweLocation location = new HooweLocation();
+
+        SQLiteDatabase database = dbHelper.DatabaseReadableGet();
+
+        if (database != null) {
+            String str = "SELECT * FROM " + DBDefine.db_location + " ORDER BY " +
+                    DBDefine.t_location.ID + " DESC LIMIT(0,1)";
+            try {
+                Cursor cursor = database.rawQuery(str, null);
+
+                if (cursor != null) {
+                    while (cursor.moveToNext()) {
+                        location = queryLocationItem(cursor);
+                    }
+                    cursor.close();
+                }
+            } catch (Exception exception) {
+                Log.e(TAG, "[SQL EXCEPTION] " + str + " -> " + exception.getMessage());
+            }
+
+            dbHelper.DatabaseReadableClose(database);
+        }
+
+        return location;
+
+    }
+
+    /**
      * 查询时间段的位置信息
      *
      * @param startTime 开始时间
@@ -207,7 +241,7 @@ public class TableLocation {
         if (database != null) {
             String str = "SELECT * FROM " + DBDefine.db_location + " WHERE " +
                     DBDefine.t_location.locTime + " between " + startTime + " and " +
-                    endTime + "order by " + DBDefine.t_location.locTime + " DESC";
+                    endTime + " ORDER BY " + DBDefine.t_location.locTime + " DESC";
 
             try {
                 Cursor cursor = database.rawQuery(str, null);
@@ -236,21 +270,19 @@ public class TableLocation {
      * 查询时间段的位置信息
      *
      * @param time   指定时间
-     * @param offset 时间偏移量
      * @return 返回值可能为 null ，注意处理该返回
      */
-    protected HooweLocation locDBLoadByTime(long time, int offset) {
+    protected HooweLocation locDBLoadByTime(long time, int frequency) {
         Log.i(TAG, "[DB] location load by time");
         HooweLocation location = null;
         List<HooweLocation> locations = new ArrayList<>();
-        locations.addAll(locDBLoadByPeriod((time - HooweLocationProvider.getInstance().getmFrequency() * offset),
-                time + HooweLocationProvider.getInstance().getmFrequency() * offset));
+        locations.addAll(locDBLoadByPeriod((time - frequency),
+                time + frequency));
         if (locations.size() > 0) {
             return getClosestLocation(time, locations);
         } else {
-            Log.i(TAG, "[DB] location load by time offset * 10");
             if (recursive <= RECURSIVE_NUM) {
-                locDBLoadByTime(time, offset * 10); // 递归扩大查询范围
+                locDBLoadByTime(time, frequency * 10); // 递归扩大查询范围
                 recursive++;
             }
         }
@@ -258,28 +290,55 @@ public class TableLocation {
         return null;
     }
 
-        /**
-         * 获取记录目标时间最近的位置点
-         * @param time
-         * @param locations
-         * @return
-         */
-        private HooweLocation getClosestLocation(long time, List<HooweLocation> locations) {
-            long tempOffset = 0, targetOffset = 0;
-            HooweLocation loaction = null;
-            for (int i = 0; i < locations.size(); i++) {
-                tempOffset = Math.abs(time - locations.get(i).getLocTime());
-                if (i == 0) {
-                    targetOffset = tempOffset;
-                    loaction = locations.get(i);
+    /**
+     * 获取记录目标时间最近的位置点
+     * 因为 locations 是个有序集合
+     * 故采用二分查找优化后
+     *
+     * @param time
+     * @param locations
+     * @return
+     */
+    private HooweLocation getClosestLocation(long time, List<HooweLocation> locations) {
+        HooweLocation location = null;
+        int low = 0, high = locations.size() - 1;
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+            if (low < mid && mid < high) { // 中值未与边界重合
+                long offsetLeft = Math.abs(locations.get(mid - 1).getLocTime() - time);
+                long offectRight = Math.abs(locations.get(mid + 1).getLocTime() - time);
+                if (offectRight > offsetLeft) { // 取左边继续折半
+                    high = mid;
+                } else if (offectRight < offsetLeft) { // 取右边继续折半
+                    low = mid;
+                }
+            } else if (mid == low || mid == high) { // 中值与边界重合
+                if (mid == low) {
+                    // 与左边界重合
+                    long offsetLeft = Math.abs(locations.get(mid).getLocTime() - time);
+                    long offectRight = Math.abs(locations.get(mid + 1).getLocTime() - time);
+                    if (offsetLeft <= offectRight) {
+                        location = locations.get(mid);
+                        break;
+                    } else {
+                        location = locations.get(mid + 1);
+                        break;
+                    }
                 } else {
-                    if (tempOffset < targetOffset) {
-                        targetOffset = tempOffset;
-                        loaction = locations.get(i);
+                    // 与右边界重合
+                    long offsetLeft = Math.abs(locations.get(mid - 1).getLocTime() - time);
+                    long offectRight = Math.abs(locations.get(mid).getLocTime() - time);
+                    if (offsetLeft <= offectRight) {
+                        location = locations.get(mid - 1);
+                        break;
+                    } else {
+                        location = locations.get(mid);
+                        break;
                     }
                 }
             }
-            return loaction;
         }
+        return location;
+    }
 
 }

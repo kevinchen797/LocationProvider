@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.baidu.location.BDLocation;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -14,8 +12,6 @@ import java.util.Random;
 import hoowe.locationmanagerlibrary.hoowe.HooweLocation;
 import hoowe.locationmanagerlibrary.hoowe.HooweLocationProvider;
 import hoowe.locationmanagerlibrary.hoowe.HooweLocationTracker;
-import hoowe.locationmanagerlibrary.hoowe.OnLocationTrackerListener;
-import hoowe.locationmanagerlibrary.utils.TimeUtils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -81,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 
-        test();
 
     }
 
@@ -97,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
         for (HooweLocation loc : list) {
             Log.i(TAG, "locTime = " + loc.getLocTime());
         }
-        Log.d(TAG, "@@@ = " + TimeUtils.getClosestLocation2(time, list).getLocTime());
+
     }
 
     @Override

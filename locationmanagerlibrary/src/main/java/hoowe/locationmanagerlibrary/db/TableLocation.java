@@ -258,79 +258,28 @@ public class TableLocation {
         return null;
     }
 
-    //    /**
-    //     * 获取记录目标时间最近的位置点
-    //     * @param time
-    //     * @param locations
-    //     * @return
-    //     */
-    //    private HooweLocation getClosestLocation(long time, List<HooweLocation> locations) {
-    //        long tempOffset = 0, targetOffset = 0;
-    //        HooweLocation loaction = null;
-    //        for (int i = 0; i < locations.size(); i++) {
-    //            tempOffset = Math.abs(time - locations.get(i).getLocTime());
-    //            if (i == 0) {
-    //                targetOffset = tempOffset;
-    //                loaction = locations.get(i);
-    //            } else {
-    //                if (tempOffset < targetOffset) {
-    //                    targetOffset = tempOffset;
-    //                    loaction = locations.get(i);
-    //                }
-    //            }
-    //        }
-    //        return loaction;
-    //    }
-
-    /**
-     * 获取记录目标时间最近的位置点
-     * 因为 locations 是个有序集合
-     * 故采用二分查找优化后
-     *
-     * @param time
-     * @param locations
-     * @return
-     */
-    private HooweLocation getClosestLocation(long time, List<HooweLocation> locations) {
-        HooweLocation location = null;
-        int low = 0, high = locations.size() - 1;
-        while (low <= high) {
-            int mid = low + (high - low) / 2;
-            if (low < mid && mid < high) { // 中值未与边界重合
-                long offsetLeft = Math.abs(locations.get(mid - 1).getLocTime() - time);
-                long offectRight = Math.abs(locations.get(mid + 1).getLocTime() - time);
-                if (offectRight > offsetLeft) { // 取左边继续折半
-                    high = mid;
-                } else if (offectRight < offsetLeft) { // 取右边继续折半
-                    low = mid;
-                }
-            } else if (mid == low || mid == high) { // 中值与边界重合
-                if (mid == low) {
-                    // 与左边界重合
-                    long offsetLeft = Math.abs(locations.get(mid).getLocTime() - time);
-                    long offectRight = Math.abs(locations.get(mid + 1).getLocTime() - time);
-                    if (offsetLeft <= offectRight) {
-                        location = locations.get(mid);
-                        break;
-                    } else {
-                        location = locations.get(mid + 1);
-                        break;
-                    }
+        /**
+         * 获取记录目标时间最近的位置点
+         * @param time
+         * @param locations
+         * @return
+         */
+        private HooweLocation getClosestLocation(long time, List<HooweLocation> locations) {
+            long tempOffset = 0, targetOffset = 0;
+            HooweLocation loaction = null;
+            for (int i = 0; i < locations.size(); i++) {
+                tempOffset = Math.abs(time - locations.get(i).getLocTime());
+                if (i == 0) {
+                    targetOffset = tempOffset;
+                    loaction = locations.get(i);
                 } else {
-                    // 与右边界重合
-                    long offsetLeft = Math.abs(locations.get(mid - 1).getLocTime() - time);
-                    long offectRight = Math.abs(locations.get(mid).getLocTime() - time);
-                    if (offsetLeft <= offectRight) {
-                        location = locations.get(mid - 1);
-                        break;
-                    } else {
-                        location = locations.get(mid);
-                        break;
+                    if (tempOffset < targetOffset) {
+                        targetOffset = tempOffset;
+                        loaction = locations.get(i);
                     }
                 }
             }
+            return loaction;
         }
-        return location;
-    }
 
 }

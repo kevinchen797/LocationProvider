@@ -11,6 +11,9 @@ import android.util.Log;
 
 import java.util.List;
 
+import hoowe.locationmanagerlibrary.hoowe.HooweLocation;
+import hoowe.locationmanagerlibrary.hoowe.HooweLocationProvider;
+
 /**
  * Created by Admin on 2017/8/28.
  */
@@ -24,6 +27,8 @@ public class LocationDBHelper extends SQLiteOpenHelper {
     private Context mContext = null;
 
     private volatile static LocationDBHelper dbHelper = null;
+
+    private TableLocation tableLocation = TableLocation.getInstance(this);
 
     private boolean isDBReading = false;
 
@@ -348,5 +353,63 @@ public class LocationDBHelper extends SQLiteOpenHelper {
             return;
         }
     };
+
+    /***************** 位置信息操作 ****************/
+
+    /**
+     * 插入新数据
+     *
+     * @param location
+     */
+    public void locationInsert(HooweLocation location) {
+        tableLocation.locationInsert(location);
+    }
+
+    /**
+     * 删除位置信息
+     *
+     * @param locationID
+     */
+    public void locationRemove(String locationID) {
+        tableLocation.locationRemove(locationID);
+    }
+
+    /**
+     * 根据 locationID 更新位置
+     *
+     * @param location
+     */
+    public void locationUpdate(HooweLocation location) {
+        tableLocation.locationUpdate(location);
+    }
+
+    /**
+     * 获取最新的位置信息
+     * @return
+     */
+    public HooweLocation getLatestLocation() {
+        return tableLocation.getLatestLocation();
+    }
+
+    /**
+     * 查询时间段的位置信息
+     *
+     * @param startTime 开始时间
+     * @param endTime   结束时间
+     * @return
+     */
+    public List<HooweLocation> locDBLoadByPeriod(long startTime, long endTime) {
+        return tableLocation.locDBLoadByPeriod(startTime, endTime);
+    }
+
+    /**
+     * 查询时间段的位置信息
+     *
+     * @param time   指定时间
+     * @return 返回值可能为 null ，注意处理该返回
+     */
+    public HooweLocation locDBLoadByTime(long time) {
+        return tableLocation.locDBLoadByTime(time, HooweLocationProvider.getInstance().getmFrequency());
+    }
 
 }

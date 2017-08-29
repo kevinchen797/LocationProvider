@@ -15,8 +15,6 @@ public class HooweLocationProvider {
 
     private Context mContext;
 
-//    private OnLocationTrackerListener mListener;
-
     private LocationClientOption mOption;
 
     private LocationTracker mTracker;

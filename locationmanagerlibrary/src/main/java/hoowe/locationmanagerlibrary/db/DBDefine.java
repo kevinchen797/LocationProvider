@@ -9,7 +9,7 @@ public final class DBDefine {
 
     private static final String CREATE = "CREATE TABLE IF NOT EXISTS ";
     protected static final String CREATE_T_LOCATION = CREATE + "t_location(ID integer PRIMARY KEY AUTOINCREMENT, " +
-            "locationID TEXT,locType INTEGER,locTime TEXT,locLatitude REAL,locLongitude REAL,radius REAL, " +
+            "locationID TEXT,locType INTEGER,locTime INTEGER,locTimeText TEXT,locLatitude REAL,locLongitude REAL,radius REAL, " +
             "addrStr REAL,country TEXT,countryCode TEXT,city TEXT,cityCode TEXT,district TEXT,street TEXT," +
             "streetNumber TEXT,locationDescribe TEXT,buildingID TEXT,buildingName TEXT,floor TEXT,speed REAL," +
             "satelliteNumber INTEGER,altitude REAL,direction REAL,operators INTEGER)";
@@ -18,7 +18,8 @@ public final class DBDefine {
         protected static final String ID = "ID";
         protected static final String locationID = "locationID"; // 定位唯一ID，v7.2版本新增，用于排查定位问题 <String>
         protected static final String locType = "locType"; // 定位类型 <int>
-        protected static final String locTime = "locTime"; // 定位时间 <String>
+        protected static final String locTime = "locTime"; // 定位时间 <long> 用于操作数据库
+        protected static final String locTimeText = "locTimeText"; //  定位时间 <String> 用于查看
         protected static final String locLatitude = "locLatitude"; // 纬度信息 <double>
         protected static final String locLongitude = "locLongitude"; // 经度信息 <double>
         protected static final String radius = "radius"; // 定位精准度 <float>

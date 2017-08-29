@@ -1,4 +1,4 @@
-package hoowe.locationmanagerlibrary;
+package hoowe.locationmanagerlibrary.hoowe;
 
 import android.content.Context;
 import android.util.Log;
@@ -12,8 +12,8 @@ import com.baidu.location.LocationClientOption.LocationMode;
 /**
  * @author DreamFish
  */
-public class LocationTracker extends BDAbstractLocationListener {
-    public static final String TAG = "LocationTracker";
+public class HooweLocationTracker extends BDAbstractLocationListener {
+    public static final String TAG = "HooweLocationTracker";
 
     private LocationClient client = null;
 
@@ -27,7 +27,7 @@ public class LocationTracker extends BDAbstractLocationListener {
      *
      * @param locationContext
      */
-    public LocationTracker(Context locationContext) {
+    public HooweLocationTracker(Context locationContext) {
         synchronized (objLock) {
             if (client == null) {
                 client = new LocationClient(locationContext);

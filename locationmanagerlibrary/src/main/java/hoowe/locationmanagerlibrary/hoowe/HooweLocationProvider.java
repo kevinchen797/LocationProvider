@@ -1,6 +1,7 @@
-package hoowe.locationmanagerlibrary;
+package hoowe.locationmanagerlibrary.hoowe;
 
 import android.content.Context;
+
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.SDKInitializer;
 
@@ -17,9 +18,13 @@ public class HooweLocationProvider {
 
     private LocationClientOption mOption;
 
-    private LocationTracker mTracker;
+    private HooweLocationTracker mTracker;
 
     private boolean hasTracker = false;
+
+    private static int LOCATION_FREQUENCY = 1000; // 默认定位频度 1 秒/次 (必须 >= 1 秒)
+
+    private int mFrequency = 1; // 定位频度
 
     /**
      * 类级的内部类，也就是静态类的成员式内部类，该内部类的实例与外部类的实例
@@ -64,6 +69,10 @@ public class HooweLocationProvider {
         return hasTracker;
     }
 
+    public int getmFrequency() {
+        return mFrequency;
+    }
+
     /***
      *
      * @return DefaultLocationClientOption
@@ -73,7 +82,7 @@ public class HooweLocationProvider {
             mOption = new LocationClientOption();
             mOption.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);//可选，默认高精度，设置定位模式，高精度，低功耗，仅设备
             mOption.setCoorType("bd09ll");//可选，默认gcj02，设置返回的定位结果坐标系，如果配合百度地图使用，建议设置为bd09ll;
-            mOption.setScanSpan(3000);//可选，默认0，即仅定位一次，设置发起定位请求的间隔需要大于等于1000ms才是有效的
+            mOption.setScanSpan(LOCATION_FREQUENCY);//可选，默认0，即仅定位一次，设置发起定位请求的间隔需要大于等于1000ms才是有效的
             mOption.setIsNeedAddress(true);//可选，设置是否需要地址信息，默认不需要
             mOption.setIsNeedLocationDescribe(true);//可选，设置是否需要地址描述
             mOption.setNeedDeviceDirect(false);//可选，设置是否需要设备方向结果
@@ -106,7 +115,7 @@ public class HooweLocationProvider {
         if (hasTracker) { // 有追踪任务在运行
             // TODO: 2017/8/28 获取最新位置返回
         } else {
-            final LocationTracker locationTracker = new LocationTracker(mContext);
+            final HooweLocationTracker locationTracker = new HooweLocationTracker(mContext);
             if (mOption != null)
                 locationTracker.setLocationOption(mOption);
 
@@ -151,10 +160,14 @@ public class HooweLocationProvider {
      */
     public void startTracker(LocationClientOption mOption, int frequency, OnLocationTrackerListener listener) {
         if (!hasTracker) {
-            mTracker = new LocationTracker(mContext);
+            mTracker = new HooweLocationTracker(mContext);
             if (mOption != null) {
                 if (frequency >= 1) {
                     mOption.setScanSpan(frequency * 1000);
+                    mFrequency = frequency;
+                } else {
+                    mOption.setScanSpan(LOCATION_FREQUENCY);
+                    mFrequency = LOCATION_FREQUENCY;
                 }
                 mTracker.setLocationOption(mOption);
             }

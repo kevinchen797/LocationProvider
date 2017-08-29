@@ -2,7 +2,7 @@ package com.hoowe.locationprovider;
 
 import android.app.Application;
 
-import hoowe.locationmanagerlibrary.HooweLocationProvider;
+import hoowe.locationmanagerlibrary.hoowe.HooweLocationProvider;
 
 /**
  * Created by DreamFisn on 2017/8/26.

@@ -1,4 +1,4 @@
-package hoowe.locationmanagerlibrary;
+package hoowe.locationmanagerlibrary.hoowe;
 
 import com.baidu.location.BDLocation;
 

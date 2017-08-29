@@ -1,4 +1,4 @@
-package hoowe.locationmanagerlibrary;
+package hoowe.locationmanagerlibrary.hoowe;
 
 /**
  * Created by Admin on 2017/8/28.
@@ -16,7 +16,11 @@ public class HooweLocation {
     /**
      *  定位时间
      */
-    private String locTime;
+    private long locTime;
+    /**
+     *  定位时间
+     */
+    private String locTimeText;
     /**
      *  纬度信息
      */
@@ -118,12 +122,20 @@ public class HooweLocation {
         this.locType = locType;
     }
 
-    public String getLocTime() {
+    public long getLocTime() {
         return locTime;
     }
 
-    public void setLocTime(String locTime) {
+    public void setLocTime(long locTime) {
         this.locTime = locTime;
+    }
+
+    public String getLocTimeText() {
+        return locTimeText;
+    }
+
+    public void setLocTimeText(String locTimeText) {
+        this.locTimeText = locTimeText;
     }
 
     public double getLatitude() {

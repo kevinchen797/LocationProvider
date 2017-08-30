@@ -3,6 +3,9 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 // Your Group
 group='com.github.dreamfish797'
+// Bintray-release
+//apply plugin: 'com.novoda.bintray-release'
+
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
@@ -28,7 +31,22 @@ android {
             jniLibs.srcDirs = ['libs']
         }
     }
+
+    //这个没写的话在执行gradlew bintrayupload时也会提示加上
+    lintOptions {
+        abortOnError false
+    }
 }
+
+//新添加
+//publish {
+//    userOrg = 'chenmingyao' //在https://bintray.com上注册的用户名
+//    groupId = 'com.chenmingyao' //jCenter上的路径
+//    artifactId = 'LocationProvider' //要上传的library名称（和二、4中的package相同）
+//    publishVersion = '1.0.1' //library的版本号
+//    desc = 'A location library，that is based on baiduMap' //library的简单描述
+//    website = 'https://github.com/dreamfish797/LocationProvider' //library的开源地址，例如在github上的地址
+//}
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -39,3 +57,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile files('libs/BaiduLBS_Android.jar')
 }
+
+apply from: "bintrayUpload.gradle"

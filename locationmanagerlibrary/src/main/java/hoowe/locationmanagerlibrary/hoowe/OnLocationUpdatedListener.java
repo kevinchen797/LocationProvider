@@ -7,7 +7,7 @@ import java.util.List;
  * Created by chen.mingyao on 2017/8/28.
  */
 
-public interface OnLocationTrackerListener {
+public interface OnLocationUpdatedListener {
 
     void onReceiveLocation(HooweLocation location);
 

@@ -107,7 +107,7 @@ public class HooweLocationProvider {
      *
      * @param listener
      */
-    public void getCurrentLocation(OnLocationTrackerListener listener) {
+    public void getCurrentLocation(OnLocationUpdatedListener listener) {
         this.getCurrentLocation(null, listener);
     }
 
@@ -117,7 +117,7 @@ public class HooweLocationProvider {
      * @param mOption
      * @param listener
      */
-    public void getCurrentLocation(LocationClientOption mOption, OnLocationTrackerListener listener) {
+    public void getCurrentLocation(LocationClientOption mOption, OnLocationUpdatedListener listener) {
         if (hasTracker) { // 有追踪任务在运行
             // 获取最新位置返回
             HooweLocation location = LocationDBHelper.getHelper(mContext).getLatestLocation();
@@ -137,7 +137,7 @@ public class HooweLocationProvider {
      *
      * @param time
      */
-    public void getLocationByTime(long time, OnLocationTrackerListener listener) {
+    public void getLocationByTime(long time, OnLocationUpdatedListener listener) {
         HooweLocation location = LocationDBHelper.getHelper(mContext).locDBLoadByTime(time);
         if (location != null) {
             listener.onReceiveLocation(location);
@@ -152,7 +152,7 @@ public class HooweLocationProvider {
      * @param startTime
      * @param endTime
      */
-    public void getLocationByPeriod(Long startTime, long endTime, OnLocationTrackerListener listener) {
+    public void getLocationByPeriod(Long startTime, long endTime, OnLocationUpdatedListener listener) {
         List<HooweLocation> locationList = new ArrayList<>();
         locationList.addAll(LocationDBHelper.getHelper(mContext).locDBLoadByPeriod(startTime, endTime));
         if (locationList.size() > 0) {
@@ -168,7 +168,7 @@ public class HooweLocationProvider {
      * @param frequency 定位频率 单位：毫秒
      * @param listener
      */
-    public void startTracker(int frequency, OnLocationTrackerListener listener) {
+    public void startTracker(int frequency, OnLocationUpdatedListener listener) {
         this.startTracker(null, frequency, listener);
     }
 
@@ -179,7 +179,7 @@ public class HooweLocationProvider {
      * @param frequency 定位频率 单位：毫秒
      * @param listener
      */
-    public void startTracker(LocationClientOption mOption, int frequency, OnLocationTrackerListener listener) {
+    public void startTracker(LocationClientOption mOption, int frequency, OnLocationUpdatedListener listener) {
         if (!hasTracker) {
             mTracker = new HooweLocationTracker(mContext);
             if (mOption != null) {

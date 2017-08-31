@@ -5,14 +5,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import hoowe.locationmanagerlibrary.hoowe.HooweLocation;
 import hoowe.locationmanagerlibrary.hoowe.HooweLocationProvider;
 import hoowe.locationmanagerlibrary.hoowe.HooweLocationTracker;
-import hoowe.locationmanagerlibrary.hoowe.OnLocationTrackerListener;
+import hoowe.locationmanagerlibrary.hoowe.OnLocationUpdatedListener;
 import hoowe.locationmanagerlibrary.utils.TimeUtils;
 
 public class MainActivity extends AppCompatActivity {
@@ -40,21 +38,21 @@ public class MainActivity extends AppCompatActivity {
 //
 //        mManager.start();
 
-//        HooweLocationProvider.getInstance().getCurrentLocation(HooweLocationProvider.getInstance().getDefaultLocationClientOption(), new OnLocationTrackerListener() {
+//        HooweLocationProvider.getInstance().getCurrentLocation(HooweLocationProvider.getInstance().getDefaultLocationClientOption(), new OnLocationUpdatedListener() {
 //            @Override
 //            public void onReceiveLocation(BDLocation bdLocation) {
 //                Log.d(TAG, "onReceiveLocation 1 Latitude = " + bdLocation.getLatitude());
 //            }
 //        });
 //
-//        HooweLocationProvider.getInstance().getCurrentLocation(HooweLocationProvider.getInstance().getDefaultLocationClientOption(), new OnLocationTrackerListener() {
+//        HooweLocationProvider.getInstance().getCurrentLocation(HooweLocationProvider.getInstance().getDefaultLocationClientOption(), new OnLocationUpdatedListener() {
 //            @Override
 //            public void onReceiveLocation(BDLocation bdLocation) {
 //                Log.d(TAG, "onReceiveLocation 2 Latitude = " + bdLocation.getLatitude());
 //            }
 //        });
 
-        HooweLocationProvider.getInstance().startTracker(3000, new OnLocationTrackerListener() {
+        HooweLocationProvider.getInstance().startTracker(3000, new OnLocationUpdatedListener() {
 
             @Override
             public void onReceiveLocation(HooweLocation hooweLocation) {
@@ -79,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        HooweLocationProvider.getInstance().startTracker(3000, new OnLocationTrackerListener() {
+        HooweLocationProvider.getInstance().startTracker(3000, new OnLocationUpdatedListener() {
             @Override
             public void onReceiveLocation(HooweLocation bdLocation) {
                 Log.d(TAG, "onReceiveLocation 3");

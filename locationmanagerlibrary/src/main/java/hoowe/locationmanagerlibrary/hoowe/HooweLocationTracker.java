@@ -1,10 +1,6 @@
 package hoowe.locationmanagerlibrary.hoowe;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.os.Build;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 import com.baidu.location.BDAbstractLocationListener;
@@ -30,7 +26,7 @@ public class HooweLocationTracker extends BDAbstractLocationListener {
 
     private Object objLock = new Object();
 
-    private OnLocationTrackerListener mListener;
+    private OnLocationUpdatedListener mListener;
 
     /***
      *
@@ -51,7 +47,7 @@ public class HooweLocationTracker extends BDAbstractLocationListener {
      * @param listener
      * @return
      */
-    public boolean registerListener(OnLocationTrackerListener listener) {
+    public boolean registerListener(OnLocationUpdatedListener listener) {
         boolean isSuccess = false;
         if (listener != null) {
             this.mListener = listener;

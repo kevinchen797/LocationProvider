@@ -187,13 +187,14 @@ public class HooweLocationProvider {
                     mOption.setScanSpan(frequency);
                     mFrequency = frequency;
                 } else {
-                    mOption = getDefaultLocationClientOption();
                     mOption.setScanSpan(LOCATION_FREQUENCY);
                     mFrequency = LOCATION_FREQUENCY;
                 }
-                mTracker.setLocationOption(mOption);
+            } else {
+                mOption = getDefaultLocationClientOption();
             }
 
+            mTracker.setLocationOption(mOption);
             mTracker.registerListener(listener);
             mTracker.start();
             hasTracker = true;

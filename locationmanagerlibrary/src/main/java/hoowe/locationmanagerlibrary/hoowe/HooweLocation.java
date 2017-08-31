@@ -319,11 +319,11 @@ public class HooweLocation {
                 ", buildingID='" + buildingID + '\'' +
                 ", buildingName='" + buildingName + '\'' +
                 ", floor='" + floor + '\'' +
-                ", speed=" + speed +
-                ", satelliteNumber=" + satelliteNumber +
-                ", altitude=" + altitude +
-                ", direction=" + direction +
-                ", operators=" + operators +
+                ", speed=" + speed + '\'' +
+                ", satelliteNumber=" + satelliteNumber + '\'' +
+                ", altitude=" + altitude + '\'' +
+                ", direction=" + direction + '\'' +
+                ", operators=" + operators + '\'' +
                 '}';
     }
 }

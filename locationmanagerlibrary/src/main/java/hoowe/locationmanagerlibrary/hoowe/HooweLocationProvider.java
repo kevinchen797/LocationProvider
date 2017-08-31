@@ -187,6 +187,7 @@ public class HooweLocationProvider {
                     mOption.setScanSpan(frequency);
                     mFrequency = frequency;
                 } else {
+                    mOption = getDefaultLocationClientOption();
                     mOption.setScanSpan(LOCATION_FREQUENCY);
                     mFrequency = LOCATION_FREQUENCY;
                 }

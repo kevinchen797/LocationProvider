@@ -148,6 +148,7 @@ public class HooweLocationTracker extends BDAbstractLocationListener {
         if (!HooweLocationProvider.getInstance().isHasTracker()) {
             // 每次位置更新回调通知界面
             mListener.onReceiveLocation(location);
+            unregisterListener();
         }
     }
 

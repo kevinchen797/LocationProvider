@@ -70,6 +70,50 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+//        HooweLocationProvider.getInstance().getCurrentLocation(option, new OnLocationUpdatedListener() {
+//            @Override
+//            public void onReceiveLocation(HooweLocation location) {
+//
+//            }
+//
+//            @Override
+//            public void onReceiveLocation(List<HooweLocation> LocationList) {
+//
+//            }
+//
+//            @Override
+//            public void onLocationTrackerExist() {
+//
+//            }
+//
+//            @Override
+//            public void onLocationTrackerNotRun() {
+//
+//            }
+//        });
+
+//        HooweLocationProvider.getInstance().getLocationByPeriod("2017-09-01 11:11:11", "2017-09-01 12:12:12", new OnLocationUpdatedListener() {
+//            @Override
+//            public void onReceiveLocation(HooweLocation location) {
+//
+//            }
+//
+//            @Override
+//            public void onReceiveLocation(List<HooweLocation> LocationList) {
+//
+//            }
+//
+//            @Override
+//            public void onLocationTrackerExist() {
+//
+//            }
+//
+//            @Override
+//            public void onLocationTrackerNotRun() {
+//
+//            }
+//        });
+
     }
 
     private void displayLocation(HooweLocation location, TextView textView) {

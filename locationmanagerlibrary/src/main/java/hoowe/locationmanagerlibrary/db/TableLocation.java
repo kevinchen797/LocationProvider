@@ -16,7 +16,7 @@ import hoowe.locationmanagerlibrary.hoowe.HooweLocationProvider;
  */
 
 public class TableLocation {
-    private static final String TAG = "TableChannel";
+    private static final String TAG = "TableLocation";
 
     private static LocationDBHelper dbHelper;
 
@@ -71,7 +71,7 @@ public class TableLocation {
         hooweLocation.setAltitude(cursor.getDouble(cursor.getColumnIndex(DBDefine.t_location.altitude)));
         hooweLocation.setDirection(cursor.getFloat(cursor.getColumnIndex(DBDefine.t_location.direction)));
         hooweLocation.setOperators(cursor.getInt(cursor.getColumnIndex(DBDefine.t_location.operators)));
-
+        Log.i(TAG, "解析cursor");
         return hooweLocation;
     }
 
@@ -242,12 +242,13 @@ public class TableLocation {
             String str = "SELECT * FROM " + DBDefine.db_location + " WHERE " +
                     DBDefine.t_location.locTime + " between " + startTime + " and " +
                     endTime + " ORDER BY " + DBDefine.t_location.locTime + " DESC";
-
+            Log.i(TAG, "sql: " + str);
             try {
                 Cursor cursor = database.rawQuery(str, null);
 
                 if (cursor != null) {
                     while (cursor.moveToNext()) {
+                        Log.i(TAG, "获取cursor");
                         HooweLocation location = queryLocationItem(cursor);
                         locationList.add(location);
                     }
@@ -282,11 +283,12 @@ public class TableLocation {
             return getClosestLocation(time, locations);
         } else {
             if (recursive <= RECURSIVE_NUM) {
-                locDBLoadByTime(time, frequency * 10); // 递归扩大查询范围
                 recursive++;
+                return locDBLoadByTime(time, frequency * 10); // 递归扩大查询范围
+
             }
         }
-
+        Log.e(TAG, "return null");
         return null;
     }
 
@@ -311,6 +313,9 @@ public class TableLocation {
                     high = mid;
                 } else if (offectRight < offsetLeft) { // 取右边继续折半
                     low = mid;
+                } else {
+                    location = locations.get(mid);
+                    break;
                 }
             } else if (mid == low || mid == high) { // 中值与边界重合
                 if (mid == low) {

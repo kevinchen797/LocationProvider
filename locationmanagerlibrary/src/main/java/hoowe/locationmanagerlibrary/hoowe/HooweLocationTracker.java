@@ -22,8 +22,6 @@ public class HooweLocationTracker extends BDAbstractLocationListener {
 
     private LocationClient client = null;
 
-//    private LocationClientOption mOption;
-
     private Object objLock = new Object();
 
     private OnLocationUpdatedListener mListener;

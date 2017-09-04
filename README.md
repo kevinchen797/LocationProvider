@@ -72,6 +72,11 @@ HooweLocationProvider.getInstance().startTracker(option, new OnLocationUpdatedLi
         });
 ```
 
+* 结束位置追踪
+```
+HooweLocationProvider.getInstance().endTracker();
+```
+
 * 获取当前时间设备位置
 
 ```

@@ -1,4 +1,4 @@
-package com.hoowe.locationprovider;
+package com.hoowe.locationprovider.application;
 
 import android.app.Application;
 

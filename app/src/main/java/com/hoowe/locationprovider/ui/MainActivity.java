@@ -1,4 +1,4 @@
-package com.hoowe.locationprovider;
+package com.hoowe.locationprovider.ui;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClientOption;
+import com.hoowe.locationprovider.R;
 
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test);
+        setContentView(R.layout.activity_main);
         etTime = (EditText) findViewById(R.id.et_time);
         tvContent = (TextView) findViewById(R.id.tv_content);
         tvContentTime = (TextView) findViewById(R.id.tv_content_time);

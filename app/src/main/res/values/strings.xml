@@ -1,3 +1,25 @@
 <resources>
     <string name="app_name">LocationProvider</string>
+
+    <string name="title_main"> LocationProvider 功能展示</string>
+
+    <string name="locationTrack">位置追踪</string>
+    <string name="locationTrack_dec">开启/关闭 位置追踪</string>
+
+    <string name="location">获取定位数据</string>
+    <string name="location_dec">调用定位接口获取定位数据</string>
+
+    <string name="getLocationByTime">获取位置 - 时间</string>
+    <string name="getLocationByTime_dec">根据具体时间查询（例如获取 2017-09-01 11:11:11 时设备的位置）</string>
+
+    <string name="getLocationByPeriod">获取位置 - 时间段</string>
+    <string name="getLocationByPeriod_dec">根据一个时间范围去查询你的运动轨迹点集合</string>
+
+    <string name="notifyTitle">提示</string>
+    <string name="notifyMsg">当前应用缺少必要权限。\n\n请点击\"设置\"-\"权限\"-打开所需权限。</string>
+    <string name="setting">设置</string>
+    <string name="cancel">取消</string>
+
+    <string name="locationTrackerExist">位置追踪已开启</string>
+
 </resources>

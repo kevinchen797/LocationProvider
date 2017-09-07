@@ -42,11 +42,17 @@ Step 2. Add the dependency
 	}
 
 ```
+Step 3. 在项目的 AndroidManifest.xml 中添加 Api_Key :
+```
+<meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="请输入你的 Api_Key " />  <!--http://lbsyun.baidu.com/apiconsole/key-->
+```
+> **没有 Api_Key 的同学来来来，到这里报到** [注册百度地图 Api_Key ](http://lbsyun.baidu.com/index.php?title=androidsdk/guide/key)
 
 ### 功能使用
 
 * 开启位置追踪
-
 ```
 HooweLocationProvider.getInstance().startTracker(option, new OnLocationUpdatedListener() {
 

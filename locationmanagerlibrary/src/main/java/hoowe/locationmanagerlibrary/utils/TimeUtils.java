@@ -1,4 +1,6 @@
 package hoowe.locationmanagerlibrary.utils;
+import android.text.TextUtils;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -74,10 +76,14 @@ public final class TimeUtils {
      * @return 毫秒时间戳
      */
     public static long string2Millis(final String time, final DateFormat format) {
-        try {
-            return format.parse(time).getTime();
-        } catch (ParseException e) {
-            e.printStackTrace();
+        if (!TextUtils.isEmpty(time)) {
+            try {
+                Date date = format.parse(time);
+                long millis = date.getTime();
+                return millis;
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
         return -1;
     }

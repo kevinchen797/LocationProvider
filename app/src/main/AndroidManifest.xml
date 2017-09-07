@@ -13,7 +13,7 @@
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="i4QMK7nLxkscAz2UXGq2sUMVDhXAZmE5" />  <!--http://lbsyun.baidu.com/apiconsole/key-->
+            android:value="填写你的Api_Key" />  <!--http://lbsyun.baidu.com/apiconsole/key-->
 
         <activity android:name=".ui.MainActivity" />
 

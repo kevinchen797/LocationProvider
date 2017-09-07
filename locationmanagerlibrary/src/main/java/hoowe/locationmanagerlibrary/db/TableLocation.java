@@ -279,7 +279,9 @@ public class TableLocation {
         List<HooweLocation> locations = new ArrayList<>();
         locations.addAll(locDBLoadByPeriod((time - frequency),
                 time + frequency));
-        if (locations.size() > 0) {
+        if (locations.size() == 1) {
+            return locations.get(0);
+        } else if (locations.size() > 1) {
             return getClosestLocation(time, locations);
         } else {
             if (recursive <= RECURSIVE_NUM) {

@@ -112,7 +112,7 @@ public class HooweLocationProvider {
     }
 
     /**
-     * 获取特定时间该设备的位置（前提是指定时间开启过位置追踪）
+     * 异步 获取特定时间该设备的位置（前提是指定时间开启过位置追踪）
      *
      * @param time
      */
@@ -126,7 +126,7 @@ public class HooweLocationProvider {
     }
 
     /**
-     * 获取特定时间断该设备的位置（前提是指定时间断开启过位置追踪）
+     * 异步 获取特定时间断该设备的位置（前提是指定时间断开启过位置追踪）
      *
      * @param startTime
      * @param endTime
@@ -139,6 +139,25 @@ public class HooweLocationProvider {
         } else {
             listener.onLocationTrackerNotRun();
         }
+    }
+
+    /**
+     * 同步 获取特定时间该设备的位置（前提是指定时间开启过位置追踪）
+     *
+     * @param time
+     */
+    public HooweLocation getLocationByTime(long time) {
+        return LocationDBHelper.getHelper(mContext).locDBLoadByTime(time);
+    }
+
+    /**
+     * 同步 获取特定时间断该设备的位置（前提是指定时间断开启过位置追踪）
+     *
+     * @param startTime
+     * @param endTime
+     */
+    public List<HooweLocation> getLocationByPeriod(Long startTime, long endTime) {
+        return LocationDBHelper.getHelper(mContext).locDBLoadByPeriod(startTime, endTime);
     }
 
     /**

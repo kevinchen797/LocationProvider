@@ -44,7 +44,7 @@ Step 2. Add the dependency
 ```
 Step 3. 在项目的 AndroidManifest.xml 中添加 Api_Key :
 ```
-<meta-data
+	<meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="请输入你的 Api_Key " />  <!--http://lbsyun.baidu.com/apiconsole/key-->
 ```

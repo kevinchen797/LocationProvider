@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
+import android.util.Log;
 
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
@@ -103,8 +104,9 @@ public class TrackerService extends Service {
 
         @Override
         public void onReceiveLocation(BDLocation bdLocation) {
-            BaiduUtils.prinftBDLocation(bdLocation);
+            Log.d(TAG, "TrackerService onReceiveLocation");
             if (BaiduUtils.isValidLocation(bdLocation, cashLocation)) {
+                BaiduUtils.prinftBDLocation(bdLocation);
                 HooweLocation location = BaiduUtils.assemblyLocation(bdLocation);
                 // 将数据插入数据库
                 LocationDBHelper.getHelper(TrackerService.this).locationInsert(location);

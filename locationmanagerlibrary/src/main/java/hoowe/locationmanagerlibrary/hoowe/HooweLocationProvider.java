@@ -1,6 +1,7 @@
 package hoowe.locationmanagerlibrary.hoowe;
 
 import android.content.Context;
+import android.content.Intent;
 
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.SDKInitializer;
@@ -9,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import hoowe.locationmanagerlibrary.db.LocationDBHelper;
+import hoowe.locationmanagerlibrary.service.TrackerService;
+import hoowe.locationmanagerlibrary.utils.ServiceUtils;
 
 
 /**
@@ -63,7 +66,6 @@ public class HooweLocationProvider {
     public void initialize(Context context) {
         this.mContext = context;
         SDKInitializer.initialize(context);
-        LocationDBHelper.getHelper(context).DbActionRun();
     }
 
     /**
@@ -161,6 +163,14 @@ public class HooweLocationProvider {
     }
 
     /**
+     * 开始位置追踪 (启动追踪服务)
+     */
+    public void startTracker() {
+        Intent intent = new Intent(mContext, TrackerService.class);
+        mContext.startService(intent);
+    }
+
+    /**
      * 开始位置追踪
      *
      * @param listener
@@ -200,6 +210,10 @@ public class HooweLocationProvider {
             mTracker.stop();
         }
         hasTracker = false;
+        if (ServiceUtils.isServiceRun(mContext, ServiceUtils.TRACKER_SERVICE_CLASS_NAME)) {
+            Intent intent = new Intent(mContext, TrackerService.class);
+            mContext.stopService(intent);
+        }
 
     }
 

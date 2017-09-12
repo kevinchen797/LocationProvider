@@ -1,23 +1,14 @@
 package com.hoowe.locationprovider.ui;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.baidu.location.LocationClientOption;
 import com.hoowe.locationprovider.R;
-import com.hoowe.locationprovider.util.LocationUtils;
-
-import java.util.List;
-
-import hoowe.locationmanagerlibrary.hoowe.HooweLocation;
 import hoowe.locationmanagerlibrary.hoowe.HooweLocationProvider;
-import hoowe.locationmanagerlibrary.hoowe.OnLocationUpdatedListener;
-import hoowe.locationmanagerlibrary.utils.BaiduUtils;
 
 /**
  * Created by chen.mingyao on 2017/9/7.
@@ -50,36 +41,8 @@ public class LocationTrackActivity extends CheckPermissionsActivity implements V
     }
 
     private void startTrack() {
-
-        LocationClientOption option = new LocationClientOption();
-        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
-        option.setCoorType(BaiduUtils.CoorType_GCJ02);
-        option.setScanSpan(3000);
-        option.setIsNeedAddress(true);
-
-        HooweLocationProvider.getInstance().startTracker(option, new OnLocationUpdatedListener() {
-
-            @Override
-            public void onReceiveLocation(HooweLocation location) {
-                LocationUtils.displayLocation(location, tvMessage);
-            }
-
-            @Override
-            public void onReceiveLocation(List<HooweLocation> list) {
-
-            }
-
-            @Override
-            public void onLocationTrackerExist() {
-                Toast.makeText(getApplicationContext(), R.string.locationTrackerExist, Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "onLocationTrackerExist");
-            }
-
-            @Override
-            public void onLocationTrackerNotRun() {
-
-            }
-        });
+        HooweLocationProvider.getInstance().startTracker();
+        Toast.makeText(getApplicationContext(), R.string.locationTrackerExist, Toast.LENGTH_SHORT).show();
     }
 
     private void stopTrack() {

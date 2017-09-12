@@ -33,43 +33,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        etTime = (EditText) findViewById(R.id.et_time);
-        tvContent = (TextView) findViewById(R.id.tv_content);
-        tvContentTime = (TextView) findViewById(R.id.tv_content_time);
-        btLocation = (Button) findViewById(R.id.bt_location);
-        btLocation.setOnClickListener(this);
-
-        btStop = (Button) findViewById(R.id.bt_stop);
-        btStop.setOnClickListener(this);
-
-        LocationClientOption option = new LocationClientOption();
-        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
-        option.setCoorType(BaiduUtils.CoorType_GCJ02);
-        option.setScanSpan(3000);
-        option.setIsNeedAddress(true);
-
-        HooweLocationProvider.getInstance().startTracker(option, new OnLocationUpdatedListener() {
-
-            @Override
-            public void onReceiveLocation(HooweLocation location) {
-                displayLocation(location, tvContent);
-            }
-
-            @Override
-            public void onReceiveLocation(List<HooweLocation> list) {
-
-            }
-
-            @Override
-            public void onLocationTrackerExist() {
-                Log.d(TAG, "onLocationTrackerExist 1");
-            }
-
-            @Override
-            public void onLocationTrackerNotRun() {
-
-            }
-        });
+//        etTime = (EditText) findViewById(R.id.et_time);
+//        tvContent = (TextView) findViewById(R.id.tv_content);
+//        tvContentTime = (TextView) findViewById(R.id.tv_content_time);
+//        btLocation = (Button) findViewById(R.id.bt_location);
+//        btLocation.setOnClickListener(this);
+//
+//        btStop = (Button) findViewById(R.id.bt_stop);
+//        btStop.setOnClickListener(this);
+//
+//        LocationClientOption option = new LocationClientOption();
+//        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
+//        option.setCoorType(BaiduUtils.CoorType_GCJ02);
+//        option.setScanSpan(3000);
+//        option.setIsNeedAddress(true);
+//
+//        HooweLocationProvider.getInstance().startTracker(option, new OnLocationUpdatedListener() {
+//
+//            @Override
+//            public void onReceiveLocation(HooweLocation location) {
+//                displayLocation(location, tvContent);
+//            }
+//
+//            @Override
+//            public void onReceiveLocation(List<HooweLocation> list) {
+//
+//            }
+//
+//            @Override
+//            public void onLocationTrackerExist() {
+//                Log.d(TAG, "onLocationTrackerExist 1");
+//            }
+//
+//            @Override
+//            public void onLocationTrackerNotRun() {
+//
+//            }
+//        });
 
     }
 
@@ -177,7 +177,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 }).start();
             }
-            //LocationResult.setText(str);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -191,38 +190,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_location:
-                String time = etTime.getText().toString();
-                if (TextUtils.isEmpty(time)) {
-                    Toast.makeText(getApplicationContext(), "请输入时间", Toast.LENGTH_SHORT).show();
-                } else {
-                    HooweLocationProvider.getInstance().getLocationByTime(TimeUtils.string2Millis(time), new OnLocationUpdatedListener() {
-                        @Override
-                        public void onReceiveLocation(HooweLocation location) {
-                            displayLocation(location,tvContentTime);
-                        }
-
-                        @Override
-                        public void onReceiveLocation(List<HooweLocation> LocationList) {
-
-                        }
-
-                        @Override
-                        public void onLocationTrackerExist() {
-
-                        }
-
-                        @Override
-                        public void onLocationTrackerNotRun() {
-
-                        }
-                    });
-                }
-                break;
-            case R.id.bt_stop:
-                HooweLocationProvider.getInstance().endTracker();
-                break;
-        }
+//        switch (v.getId()) {
+//            case R.id.bt_location:
+//                String time = etTime.getText().toString();
+//                if (TextUtils.isEmpty(time)) {
+//                    Toast.makeText(getApplicationContext(), "请输入时间", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    HooweLocationProvider.getInstance().getLocationByTime(TimeUtils.string2Millis(time), new OnLocationUpdatedListener() {
+//                        @Override
+//                        public void onReceiveLocation(HooweLocation location) {
+//                            displayLocation(location,tvContentTime);
+//                        }
+//
+//                        @Override
+//                        public void onReceiveLocation(List<HooweLocation> LocationList) {
+//
+//                        }
+//
+//                        @Override
+//                        public void onLocationTrackerExist() {
+//
+//                        }
+//
+//                        @Override
+//                        public void onLocationTrackerNotRun() {
+//
+//                        }
+//                    });
+//                }
+//                break;
+//            case R.id.bt_stop:
+//                HooweLocationProvider.getInstance().endTracker();
+//                break;
+//        }
     }
 }

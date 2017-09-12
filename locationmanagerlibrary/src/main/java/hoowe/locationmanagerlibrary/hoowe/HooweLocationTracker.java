@@ -10,6 +10,7 @@ import com.baidu.location.LocationClientOption;
 import com.baidu.location.LocationClientOption.LocationMode;
 
 import hoowe.locationmanagerlibrary.db.LocationDBHelper;
+import hoowe.locationmanagerlibrary.utils.BaiduUtils;
 import hoowe.locationmanagerlibrary.utils.TimeUtils;
 
 /**
@@ -123,109 +124,17 @@ public class HooweLocationTracker extends BDAbstractLocationListener {
     @Override
     public void onReceiveLocation(BDLocation bdLocation) {
         Log.d(TAG, "tracker onReceiveLocation");
-        prinftBDLocation(bdLocation);
-        HooweLocation location = assemblyLocation(bdLocation);
-        locationInsert(location);
-        mListener.onReceiveLocation(location);
+        BaiduUtils.prinftBDLocation(bdLocation);
+        if (BaiduUtils.isValidLocation(bdLocation)) {
+            HooweLocation location = BaiduUtils.assemblyLocation(bdLocation);
+            // 将数据插入数据库
+            LocationDBHelper.getHelper(mContext).locationInsert(location);
+
+            mListener.onReceiveLocation(location);
+        }
         if (!HooweLocationProvider.getInstance().isHasTracker()) {
             // 每次位置更新回调通知界面
             unregisterListener();
         }
-    }
-
-    /**
-     * 拼装 HooweLocation
-     *
-     * @param bdLocation
-     * @return
-     */
-    private HooweLocation assemblyLocation(BDLocation bdLocation) {
-
-        HooweLocation location = new HooweLocation();
-        location.setLocationID(bdLocation.getLocationID());
-        location.setLocType(bdLocation.getLocType());
-        location.setLocTime(TimeUtils.string2Millis(bdLocation.getTime()));
-        location.setLocTimeText(bdLocation.getTime());
-        location.setLatitude(bdLocation.getLatitude());
-        location.setLongitude(bdLocation.getLongitude());
-        location.setRadius(bdLocation.getRadius());
-        location.setAddrStr(bdLocation.getAddrStr());
-        location.setCountry(bdLocation.getCountry());
-        location.setCountryCode(bdLocation.getCountryCode());
-        location.setCity(bdLocation.getCity());
-        location.setCityCode(bdLocation.getCityCode());
-        location.setDistrict(bdLocation.getDistrict());
-        location.setStreet(bdLocation.getStreet());
-        location.setStreetNumber(bdLocation.getStreetNumber());
-        location.setLocationDescribe(bdLocation.getLocationDescribe());
-        location.setBuildingID(bdLocation.getBuildingID());
-        location.setBuildingName(bdLocation.getBuildingName());
-        location.setFloor(bdLocation.getFloor());
-        location.setSpeed(bdLocation.getSpeed());
-        location.setSatelliteNumber(bdLocation.getSatelliteNumber());
-        location.setAltitude(bdLocation.getAltitude());
-        location.setDirection(bdLocation.getDirection());
-        location.setOperators(bdLocation.getOperators());
-
-        return location;
-    }
-
-
-    private void locationInsert(HooweLocation location) {
-        // 将数据插入数据库
-        LocationDBHelper.getHelper(mContext).locationInsert(location);
-        if (location.getLocType() == BDLocation.TypeGpsLocation) {
-            // 当前为GPS定位结果，可获取以下信息
-
-        } else if (location.getLocType() == BDLocation.TypeNetWorkLocation) {
-            // 当前为网络定位结果，可获取以下信息
-            // 将数据插入数据库
-            LocationDBHelper.getHelper(mContext).locationInsert(location);
-        } else if (location.getLocType() == BDLocation.TypeOffLineLocation) {
-            // 当前为离线定位结果
-
-        } else if (location.getLocType() == BDLocation.TypeServerError) {
-            // 当前网络定位失败
-            // 可将定位唯一ID、IMEI、定位失败时间反馈至loc-bugs@baidu.com
-
-        } else if (location.getLocType() == BDLocation.TypeNetWorkException) {
-            // 当前网络不通
-
-        } else if (location.getLocType() == BDLocation.TypeCriteriaException) {
-            // 当前缺少定位依据，可能是用户没有授权，建议弹出提示框让用户开启权限
-            // 可进一步参考onLocDiagnosticMessage中的错误返回码
-
-        }
-
-    }
-
-    private void prinftBDLocation(BDLocation bdLocation) {
-        Log.d("@@@", "====================BDLocation Strat====================");
-        String str = "BDLocation{" + "locationID='" + bdLocation.getLocationID() + '\'' +
-                ", locType=" + bdLocation.getLocType() +
-                ", locTime='" + bdLocation.getTime() + '\'' +
-                ", latitude=" + bdLocation.getLatitude() +
-                ", longitude=" + bdLocation.getLongitude() +
-                ", radius=" + bdLocation.getRadius() +
-                ", addrStr=" + bdLocation.getAddrStr() +
-                ", country='" + bdLocation.getCountry() + '\'' +
-                ", countryCode='" + bdLocation.getCountryCode() + '\'' +
-                ", city='" + bdLocation.getCity() + '\'' +
-                ", cityCode='" + bdLocation.getCityCode() + '\'' +
-                ", district='" + bdLocation.getDistrict() + '\'' +
-                ", street='" + bdLocation.getStreet() + '\'' +
-                ", streetNumber='" + bdLocation.getStreetNumber() + '\'' +
-                ", locationDescribe='" + bdLocation.getLocationDescribe() + '\'' +
-                ", buildingID='" + bdLocation.getBuildingID() + '\'' +
-                ", buildingName='" + bdLocation.getBuildingName() + '\'' +
-                ", floor='" + bdLocation.getFloor() + '\'' +
-                ", speed=" + bdLocation.getSpeed() + '\'' +
-                ", satelliteNumber=" + bdLocation.getSatelliteNumber() + '\'' +
-                ", altitude=" + bdLocation.getAltitude() + '\'' +
-                ", direction=" + bdLocation.getDirection() + '\'' +
-                ", operators=" + bdLocation.getOperators() + '\'' +
-                "}";
-        Log.d("@@@", str);
-        Log.d("@@@", "====================BDLocation End====================");
     }
 }

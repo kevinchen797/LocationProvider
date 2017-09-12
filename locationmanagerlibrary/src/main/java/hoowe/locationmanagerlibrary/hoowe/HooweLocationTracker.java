@@ -125,7 +125,7 @@ public class HooweLocationTracker extends BDAbstractLocationListener {
     public void onReceiveLocation(BDLocation bdLocation) {
         Log.d(TAG, "tracker onReceiveLocation");
         BaiduUtils.prinftBDLocation(bdLocation);
-        if (BaiduUtils.isValidLocation(bdLocation)) {
+        if (BaiduUtils.isValidLocation(bdLocation, null)) {
             HooweLocation location = BaiduUtils.assemblyLocation(bdLocation);
             // 将数据插入数据库
             LocationDBHelper.getHelper(mContext).locationInsert(location);

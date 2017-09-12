@@ -29,7 +29,7 @@ public class TrackerService extends Service {
 
     private LocationListener mLocationListener = new LocationListener();
 
-    private HooweLocation cashLocation = null;
+    private BDLocation cashLocation = null;
 
     public class MyBinder extends Binder {
         public TrackerService getService() {
@@ -104,7 +104,7 @@ public class TrackerService extends Service {
         @Override
         public void onReceiveLocation(BDLocation bdLocation) {
             BaiduUtils.prinftBDLocation(bdLocation);
-            if (BaiduUtils.isValidLocation(bdLocation)) {
+            if (BaiduUtils.isValidLocation(bdLocation, cashLocation)) {
                 HooweLocation location = BaiduUtils.assemblyLocation(bdLocation);
                 // 将数据插入数据库
                 LocationDBHelper.getHelper(TrackerService.this).locationInsert(location);

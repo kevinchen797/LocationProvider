@@ -45,7 +45,7 @@ public class BaiduUtils {
             isValid = true;
         } else if (bdLocation.getLocType() == BDLocation.TypeNetWorkLocation) {
             // 当前为网络定位结果
-            if (cashLocation == null || cashLocation.getLocationID().equals(bdLocation.getLocationID()))
+            if (cashLocation == null || !cashLocation.getLocationID().equals(bdLocation.getLocationID()))
                 isValid = true;
         } else if (bdLocation.getLocType() == BDLocation.TypeOffLineLocation) {
             // 当前为离线定位结果
